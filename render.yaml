@@ -1,41 +1,32 @@
 services:
   - type: web
     name: perplexica
-    env: docker          # keep this, it's valid for Docker services
+    env: docker
     plan: free
-    runtime: docker      # add this line – fixes “Missing property 'runtime'”
     dockerfilePath: ./Dockerfile
-
     envVars:
       - key: DATABASE_URL
-        value: postgresql://neondb_owner:...@ep-withered-dawn-a19wpm6v-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-
+        value: postgresql://neondb_owner:npg_QX2OqLjeZ7Hl@ep-withered-dawn-a19wpm6v-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - key: SEARXNG_API_URL
         value: https://searx.tiekoetter.com
-
       - key: OLLAMA_API_URL
         value: https://kaamalvn--perplexica-ollama-ollama-api.modal.run
-
       - key: CHAT_MODEL_PROVIDER
         value: ollama
-
       - key: CHAT_MODEL
         value: llama3.2:3b
-
       - key: EMBEDDING_MODEL_PROVIDER
         value: ollama
-
       - key: EMBEDDING_MODEL
         value: nomic-embed-text
-
       - key: PORT
-        value: 3001
-
+        value: "1001"          # ← CRITICAL: Render standard port
+      - key: HOST
+        value: "0.0.0.0"
       - key: NODE_ENV
         value: production
-
       - key: CORS_ORIGIN
         value: "*"
-
       - key: SIMILARITY_MEASURE
         value: cosine
+    healthCheckPath: /api/health
